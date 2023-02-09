@@ -1,5 +1,5 @@
 # digital-electronics-1
-#Nadpisy
+# Na**dpisy**
 
 # H1
 ## H2
@@ -16,7 +16,7 @@ Alt-H1
 Alt-H2
 ------
 
-#Fonty pisem
+# Fonty pisem
 
 Emphasis, aka italics, with *asterisks* or _underscores_.
 
