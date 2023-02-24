@@ -58,23 +58,85 @@ begin
 
     -- Report a note at the beginning of stimulus process
     report "Stimulus process started";
-
-    -- First test case ...
     sig_a_i <= "000";
     sig_b_i <= "001";
     sig_c_i <= "010";
     sig_d_i <= "011";
-    sig_y_o <= "000";
+    sig_sel_i <= "00";
+    
     wait for 100 ns;
     -- ... and its expected outputs
+    assert (sig_y_o = "000")
+      -- If false, then report an error
+      -- If true, then do not report anything
+      report "Input combination y=a FAILED"
+      severity error;
+      
+    sig_sel_i <= "01";
+    assert (sig_y_o = "001")
+      -- If false, then report an error
+      -- If true, then do not report anything
+        report "Input combination y=b FAILED"
+        severity error; 
+    wait for 100 ns;
     
+    sig_sel_i <= "10";
+    assert (sig_y_o = "010")
+      -- If false, then report an error
+      -- If true, then do not report anything
+        report "Input combination y=c FAILED"
+        severity error; 
+    wait for 100 ns;
+        
+
     
-                
-    with sig_sel_i select
-    sig_y_o <= sig_a_i when "00",  -- If addr_i = "000" then y_o = a_i
-           sig_b_i when "01",
-           sig_c_i when "10",
-           sig_d_i when others; -- All other combinations
+    sig_sel_i <= "11";
+    
+    assert (sig_y_o = "011")
+      -- If false, then report an error
+      -- If true, then do not report anything
+        report "Input combination y=d FAILED"
+        severity error; 
+    wait for 100 ns;
+    
+        
+   
+    sig_sel_i <= "11";
+    
+    assert (sig_y_o = "011")
+      -- If false, then report an error
+      -- If true, then do not report anything
+        report "Input combination y=d FAILED"
+        severity error; 
+    wait for 100 ns;
+    
+    sig_sel_i <= "10";
+    assert (sig_y_o = "010")
+      -- If false, then report an error
+      -- If true, then do not report anything
+        report "Input combination y=c FAILED"
+        severity error; 
+    wait for 100 ns;
+    
+    sig_sel_i <= "01";
+    assert (sig_y_o = "001")
+      -- If false, then report an error
+      -- If true, then do not report anything
+        report "Input combination y=b FAILED"
+        severity error; 
+    wait for 100 ns;  
+    
+    assert (sig_y_o = "000")
+      -- If false, then report an error
+      -- If true, then do not report anything
+      report "Input combination y=a FAILED"
+      severity error;     
+
+    -- Report a note at the end of stimulus process
+    report "Stimulus process finished";
+
+    
+
     wait; -- Data generation process is suspended forever
 
   end process p_stimulus;
