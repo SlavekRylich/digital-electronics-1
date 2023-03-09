@@ -69,28 +69,32 @@ begin
           d => s_ff0,
           q => s_ff1
       );
-d_ff_2 : entity work.d_ff_rst
-      port map(
-          clk   => CLK100MHZ,
-          rst   => BTNC,
-          d => s_ff1,
+    d_ff_2 : entity work.d_ff_rst
+          port map(
+              clk   => CLK100MHZ,
+              rst   => BTNC,
+              d => s_ff1,
+              
+              q => s_ff2
+          );
           
-          q => s_ff2
-      );
-      
-d_ff_3 : entity work.d_ff_rst
-      port map(
-          clk   => CLK100MHZ,
-          rst   => BTNC,
-          d => s_ff2,
-          q => s_ff3
-      );
-      
- LED(0) <= s_ff0;
- LED(1) <= s_ff1;
- LED(2) <= s_ff2;
- LED(3) <= s_ff3;
-
- 
-
+    d_ff_3 : entity work.d_ff_rst
+          port map(
+              clk   => CLK100MHZ,
+              rst   => BTNC,
+              d => s_ff2,
+              q => s_ff3
+          );
+          
+     LED(0) <= s_ff0;
+     LED(1) <= s_ff1;
+     LED(2) <= s_ff2;
+     LED(3) <= s_ff3;
+     
+--     p_top : process(CLK100MHZ)
+--        begin 
+            
+        
+    
+--        end process p_top;
 end architecture Behavioral;
