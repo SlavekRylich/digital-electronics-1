@@ -37,6 +37,7 @@ entity top is
     CE : out    std_logic; --! Cathod E
     CF : out    std_logic; --! Cathod F
     CG : out    std_logic; --! Cathod G
+    myBUS : out   std_logic_vector(3 downto 0);
     AN : out    std_logic_vector(7 downto 0); --! Common anode signals to individual displays
     BTNC : in std_logic  --! Synchronous reset
   );
@@ -77,7 +78,7 @@ begin
     rst    => BTNC, --! Synchronous reset
     en     => s_en_250ms, --! Enable input
     cnt_up => SW, --! Direction of the counter
-    cnt    => s_cnt_4bit
+    cnt    => myBUS
   );
 
   --------------------------------------------------------------------
