@@ -29,7 +29,9 @@ entity top is
   );                       -- Note that there IS a semicolon between generic and port sections
   port (
     CLK100MHZ : in    std_logic; --! Main clock
-    SW : in     std_logic;  --! Counter direction
+    SW : in     std_logic_vector(1 downto 0);  --! Counter direction
+    LED1: out std_logic_vector(3 downto 0);
+    LED2: out std_logic_vector(11 downto 0);
     CA : out    std_logic; --! Cathod A
     CB : out    std_logic; --! Cathod B
     CC : out    std_logic; --! Cathod C
@@ -37,7 +39,6 @@ entity top is
     CE : out    std_logic; --! Cathod E
     CF : out    std_logic; --! Cathod F
     CG : out    std_logic; --! Cathod G
-    myBUS : out   std_logic_vector(3 downto 0);
     AN : out    std_logic_vector(7 downto 0); --! Common anode signals to individual displays
     BTNC : in std_logic  --! Synchronous reset
   );
@@ -51,6 +52,9 @@ architecture Behavioral of top is
   signal s_en_250ms : std_logic;
   -- Internal counter
   signal s_cnt_4bit : std_logic_vector(3 downto 0);
+  -- Internal clock enable for 10-bit counter
+  signal s_en_10ms : std_logic;
+  signal s_cnt_12bit : std_logic_vector(11 downto 0);
 
 begin
 
@@ -58,12 +62,22 @@ begin
   -- Instance (copy) of clock_enable entity
   clk_en0 : entity work.clock_enable
       generic map(
-          g_MAX => 25000000
+          g_MAX => 25000000   -- 250ms
       )
       port map(
           clk => CLK100MHZ, --! Main clock
           rst => BTNC, --! High-active synchronous reset
           ce  => s_en_250ms
+      );
+
+  clk_en1 : entity work.clock_enable
+      generic map(
+          g_MAX => 1000000      -- 10ms
+      )
+      port map(
+          clk => CLK100MHZ, --! Main clock
+          rst => BTNC, --! High-active synchronous reset
+          ce  => s_en_10ms
       );
   
 
@@ -77,8 +91,20 @@ begin
     clk    => CLK100MHZ, --! Main clock
     rst    => BTNC, --! Synchronous reset
     en     => s_en_250ms, --! Enable input
-    cnt_up => SW, --! Direction of the counter
-    cnt    => myBUS
+    cnt_up => SW(0), --! Direction of the counter
+    cnt    => LED1
+  );
+  
+  bin_cnt1 : entity work.cnt_up_down_12bit
+    generic map(
+    g_CNT_WIDTH => 12 --! Default number of counter bits
+  )
+  port map (
+    clk    => CLK100MHZ, --! Main clock
+    rst    => BTNC, --! Synchronous reset
+    en     => s_en_10ms, --! Enable input
+    cnt_up => SW(1), --! Direction of the counter
+    cnt    => s_cnt_12bit
   );
 
   --------------------------------------------------------------------
@@ -98,4 +124,6 @@ begin
 
   -- Connect one common anode to 3.3V
   AN <= b"1111_1110";
+  
+  LED2 <= s_cnt_12bit;
 end architecture Behavioral;

@@ -41,9 +41,9 @@ architecture testbench of tb_top is
 
     --Local signals
     signal s_clk_100MHz : std_logic;
-    signal s_SW       : std_logic;
-    signal s_led : std_logic_vector(3 downto 0);
-    signal s_bus : std_logic_vector(3 downto 0);
+    signal s_SW       : std_logic_vector(1 downto 0);
+    signal s_led1 : std_logic_vector(3 downto 0);
+    signal s_led2 : std_logic_vector(11 downto 0);
 --    signal s_CA : std_logic ; --! Cathod A
 --    signal s_CB : std_logic ; --! Cathod B
 --    signal s_CC : std_logic ; --! Cathod C
@@ -65,14 +65,15 @@ architecture testbench of tb_top is
             CLK100MHZ   => s_clk_100MHz,
             BTNC   => s_BTNC,
             SW     => s_SW,
-            myBUS => s_bus
---            CA   => s_bus(0),
---            CB   => s_bus(1),
---            CC   => s_bus(2),
---            CD   => s_bus(3),
---            CE   => s_bus(4),
---            CF   => s_bus(5),
---            CG   => s_bus(6)
+            LED1 => s_led1,
+            LED2 => s_led2
+--            CA   => s_CA,
+--            CB   => s_CB,
+--            CC   => s_CC,
+--            CD   => s_CD,
+--            CE   => s_CE,
+--            CF   => s_CF,
+--            CG   => s_CG
             
         );
     --------------------------------------------------------
@@ -94,14 +95,18 @@ architecture testbench of tb_top is
     --------------------------------------------------------
     p_reset_gen : process
     begin
-        s_BTNC <= '0';
-
-        -- ACTIVATE AND DEACTIVATE RESET HERE
-        wait for 400 ns;
-        s_BTNC <= '1';
+            s_BTNC <= '0'; wait for 12 ns;
         
-        
-
+    
+        -- Reset activated
+        s_BTNC <= '1'; wait for 20 ns;
+       
+    
+        -- Reset deactivated
+        s_BTNC <= '0'; wait for 453 ns;
+        s_BTNC <= '1'; wait for 20 ns;
+        s_BTNC <= '0'; wait for 453 ns;
+    
         wait;
     end process p_reset_gen;
 
@@ -111,20 +116,21 @@ architecture testbench of tb_top is
     p_stimulus : process
     begin
         report "Stimulus process started";
-        s_SW <='0'; wait for 100 ns;
+        s_SW(1) <='1';
+        s_SW(0) <='1'; wait for 300 ns;
 
         -- DEFINE YOUR INPUT DATA HERE
         --s_data <='0'; wait for 10 ns;
-        s_SW <='1'; wait for 100 ns;
+        s_SW(0) <='1'; wait for 300 ns;
         
-        s_SW <='0'; wait for 100 ns;
+        s_SW(0) <='0'; wait for 300 ns;
         
-        s_SW <='1'; wait for 100 ns;
+        s_SW(0) <='1'; wait for 300 ns;
         
-        s_SW <='0'; wait for 000 ns;
-        s_SW <='1'; wait for 100 ns;
-        s_SW <='0'; wait for 000 ns;
-        s_SW <='1'; wait for 100 ns;
+        s_SW(0) <='0'; wait for 000 ns;
+        s_SW(0) <='1'; wait for 100 ns;
+        s_SW(0) <='0'; wait for 000 ns;
+        s_SW(0) <='1'; wait for 100 ns;
         
 
         report "Stimulus process finished";

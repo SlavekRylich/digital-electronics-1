@@ -78,14 +78,15 @@ begin
   p_reset_gen : process is
   begin
 
-    sig_rst <= '0';
-    wait for 12 ns;
+    sig_rst <= '0'; wait for 12 ns;
 
     -- Reset activated
-    sig_rst <= '1';
-    wait for 70 ns;
+    sig_rst <= '1'; wait for 70 ns;
+    
 
     -- Reset deactivated
+    sig_rst <= '0'; wait for 300 ns;
+    sig_rst <= '1'; wait for 15 ns;
     sig_rst <= '0';
 
     wait;
@@ -102,16 +103,17 @@ begin
 
     -- Enable counting
     sig_en <= '1';
+    sig_cnt_up <= '1'; wait for 120 ns;
+    sig_en <= '0'; wait for 86 ns;
+    sig_en <= '1';
 
     -- Change counter direction
     sig_cnt_up <= '1';
-    wait for 380 ns;
-    sig_cnt_up <= '0';
-    wait for 186 ns;
+    wait for 300 ns;
+    sig_cnt_up <= '0'; wait for 186 ns;
 
     -- Disable counting
-    sig_en <= '0';
-    wait for 86 ns;
+    sig_en <= '0'; wait for 86 ns;
     -- Enable counting again
     sig_en <= '1';
 
