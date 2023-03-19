@@ -30,8 +30,7 @@ entity top is
   port (
     CLK100MHZ : in    std_logic; --! Main clock
     SW : in     std_logic_vector(1 downto 0);  --! Counter direction
-    LED1: out std_logic_vector(3 downto 0);
-    LED2: out std_logic_vector(11 downto 0);
+    LED: out std_logic_vector(11 downto 0);
     CA : out    std_logic; --! Cathod A
     CB : out    std_logic; --! Cathod B
     CC : out    std_logic; --! Cathod C
@@ -92,7 +91,7 @@ begin
     rst    => BTNC, --! Synchronous reset
     en     => s_en_250ms, --! Enable input
     cnt_up => SW(0), --! Direction of the counter
-    cnt    => LED1
+    cnt    => s_cnt_4bit
   );
   
   bin_cnt1 : entity work.cnt_up_down_12bit
@@ -125,5 +124,5 @@ begin
   -- Connect one common anode to 3.3V
   AN <= b"1111_1110";
   
-  LED2 <= s_cnt_12bit;
+  LED <= s_cnt_12bit;
 end architecture Behavioral;
