@@ -1,116 +1,196 @@
 ----------------------------------------------------------
 --
--- Template for 4-digit 7-segment display driver testbench.
--- Nexys A7-50T, xc7a50ticsg324-1L
--- TerosHDL, Vivado v2020.2, EDA Playground
+--! @title Driver for 8-digit 7-segment display
+--! @author Tomas Fryza
+--! Dept. of Radio Electronics, Brno Univ. of Technology, Czechia
+--!
+--! @copyright (c) 2020 Tomas Fryza
+--! This work is licensed under the terms of the MIT license
 --
--- Copyright (c) 2020 Tomas Fryza
--- Dept. of Radio Electronics, Brno Univ. of Technology, Czechia
--- This work is licensed under the terms of the MIT license.
+-- Hardware: Nexys A7-50T, xc7a50ticsg324-1L
+-- Software: TerosHDL, Vivado 2020.2, EDA Playground
 --
 ----------------------------------------------------------
 
 library ieee;
   use ieee.std_logic_1164.all;
+  use ieee.numeric_std.all;
 
 ----------------------------------------------------------
--- Entity declaration for testbench
+-- Entity declaration for display driver
+--
+--             +-------------------+
+--        -----|> clk              |
+--        -----| rst            dp |-----
+--             |          seg(6:0) |--/--
+--        --/--| data0(3:0)        |  7
+--        --/--| data1(3:0)        |
+--        --/--| data2(3:0)        |
+--        --/--| data3(3:0)        |
+--          4  |           dig(3:0)|--/--
+--        --/--| dp_vect(3:0)      |  4
+--          4  +-------------------+
+--
+-- Inputs:
+--   clk          -- Main clock
+--   rst          -- Synchronous reset
+--   dataX(3:0)   -- Data values for individual digits
+--   dp_vect(3:0) -- Decimal points for individual digits
+--
+-- Outputs:
+--   dp:          -- Decimal point for specific digit
+--   seg(6:0)     -- Cathode values for individual segments
+--   dig(3:0)     -- Common anode signals to individual digits
+--
 ----------------------------------------------------------
 
-entity tb_driver_7seg_4digits is
-  -- Entity of testbench is always empty
-end entity tb_driver_7seg_4digits;
+entity driver_7seg_8digits is
+  port (
+    clk     : in    std_logic;
+    rst     : in    std_logic;
+    data0   : in    std_logic_vector(3 downto 0);
+    data1   : in    std_logic_vector(3 downto 0);
+    data2   : in    std_logic_vector(3 downto 0);
+    data3   : in    std_logic_vector(3 downto 0);
+    data4   : in    std_logic_vector(3 downto 0);
+    data5   : in    std_logic_vector(3 downto 0);
+    data6   : in    std_logic_vector(3 downto 0);
+    data7   : in    std_logic_vector(3 downto 0);
+    dp_vect : in    std_logic_vector(7 downto 0);
+    dp      : out   std_logic;
+    seg     : out   std_logic_vector(6 downto 0);
+    dig     : out   std_logic_vector(7 downto 0)
+  );
+end entity driver_7seg_8digits;
 
 ----------------------------------------------------------
--- Architecture body for testbench
+-- Architecture declaration for display driver
 ----------------------------------------------------------
 
-architecture testbench of tb_driver_7seg_4digits is
+architecture behavioral of driver_7seg_8digits is
 
-  -- Testbench local constants
-  constant c_CLK_100MHZ_PERIOD : time := 10 ns;
+  -- Internal clock enable
+  signal sig_en_4ms : std_logic;
 
-  -- Testench local signals
-  signal sig_clk_100mhz : std_logic;
-  signal sig_rst        : std_logic;
-  signal sig_data0      : std_logic_vector(3 downto 0);
-  signal sig_data1      : std_logic_vector(3 downto 0);
-  signal sig_data2      : std_logic_vector(3 downto 0);
-  signal sig_data3      : std_logic_vector(3 downto 0);
-  signal sig_dp_vect    : std_logic_vector(3 downto 0);
-  signal sig_dp         : std_logic;
-  signal sig_seg        : std_logic_vector(6 downto 0);
-  signal sig_dig        : std_logic_vector(3 downto 0);
+  -- Internal 2-bit counter for multiplexing 4 digits
+  signal sig_cnt_3bit : std_logic_vector(2 downto 0);
+
+  -- Internal 4-bit value for 7-segment decoder
+  signal sig_hex : std_logic_vector(3 downto 0);
+  
+  signal ground : std_logic;
 
 begin
 
-  -- Connecting testbench signals with driver_7seg_4digits
-  -- entity (Unit Under Test)
-  uut_driver_7seg_4digits : entity work.driver_7seg_4digits
+  --------------------------------------------------------
+  -- Instance (copy) of clock_enable entity generates
+  -- an enable pulse every 4 ms
+  --------------------------------------------------------
+  clk_en0 : entity work.clock_enable
+    generic map (
+      -- FOR SIMULATION, KEEP THIS VALUE TO 4
+      -- FOR IMPLEMENTATION, CHANGE THIS VALUE TO 400,000
+      -- 4      @ 4 ns
+      -- 400000 @ 4 ms
+      g_MAX => 4
+    )
     port map (
-      clk     => sig_clk_100mhz,
-      rst     => sig_rst,
-      data0   => sig_data0,
-      data1   => sig_data1,
-      data2   => sig_data2,
-      data3   => sig_data3,
-      dp_vect => sig_dp_vect,
-      dp      => sig_dp,
-      seg     => sig_seg,
-      dig     => sig_dig
+      clk    =>   clk, --! Main clock
+      rst    =>   rst, --! High-active synchronous reset
+      ce     =>   sig_en_4ms
     );
 
   --------------------------------------------------------
-  -- Clock generation process
+  -- Instance (copy) of cnt_up_down entity performs
+  -- a 2-bit down counter
   --------------------------------------------------------
-  p_clk_gen : process is
+  bin_cnt0 : entity work.cnt_up_down
+    generic map (
+      g_CNT_WIDTH => 3
+    )
+    port map (
+      clk    =>   clk,
+      rst    =>   rst,
+      en     =>   sig_en_4ms,
+      cnt_up =>   ground,
+      cnt    =>   sig_cnt_3bit
+      
+    );
+
+  --------------------------------------------------------
+  -- Instance (copy) of hex_7seg entity performs
+  -- a 7-segment display decoder
+  --------------------------------------------------------
+  hex2seg : entity work.hex_7seg
+    port map (
+      blank => rst,
+      hex   => sig_hex,
+      seg   => seg
+    );
+
+  --------------------------------------------------------
+  -- p_mux:
+  -- A sequential process that implements a multiplexer for
+  -- selecting data for a single digit, a decimal point,
+  -- and switches the common anodes of each display.
+  --------------------------------------------------------
+  p_mux : process (clk) is
   begin
 
-    while now < 400 ns loop -- 40 periods of 100MHz clock
+    if (rising_edge(clk)) then
+      if (rst = '1') then
+        sig_hex <= data0;
+        dp      <= dp_vect(0);
+        dig     <= "11111110";
+      else
 
-      sig_clk_100mhz <= '0';
-      wait for c_CLK_100MHZ_PERIOD / 2;
-      sig_clk_100mhz <= '1';
-      wait for c_CLK_100MHZ_PERIOD / 2;
+        case sig_cnt_3bit is
+          when "111" =>
+            sig_hex <= data7;
+            dp      <= dp_vect(7);
+            dig     <= "01111111";
+          when "110" =>
+            sig_hex <= data6;
+            dp      <= dp_vect(6);
+            dig     <= "10111111";
+          when "101" =>
+            sig_hex <= data5;
+            dp      <= dp_vect(5);
+            dig     <= "11011111";
+          when "100" =>
+            sig_hex <= data4;
+            dp      <= dp_vect(4);
+            dig     <= "11101111";
 
-    end loop;
-    wait;
+          when "011" =>
+            sig_hex <= data3;
+            dp      <= dp_vect(3);
+            dig     <= "11110111";
 
-  end process p_clk_gen;
+          when "010" =>
+            -- DEFINE ALL OUTPUTS FOR "10" HERE
+            sig_hex <= data2;
+            dp      <= dp_vect(2);
+            dig     <= "11111011";
 
-  --------------------------------------------------------
-  -- Reset generation process
-  --------------------------------------------------------
-  p_reset_gen : process is
-  begin
+          when "001" =>
+            -- DEFINE ALL OUTPUTS FOR "01" HERE
+            sig_hex <= data1;
+            dp      <= dp_vect(1);
+            dig     <= "11111101";
 
-    sig_rst <= '0'; wait for 5ns;
-    -- WRITE YOUR CODE HERE AND ACTIVATE RESET FOR A WHILE
-    sig_rst <= '1'; wait  for 30ns;
-    sig_rst <= '0';
+          when others =>
+            -- DEFINE ALL OUTPUTS FOR "00" HERE
+            sig_hex <= data0;
+            dp      <= dp_vect(0);
+            dig     <= "11111110";
 
-    wait;
+        end case;
 
-  end process p_reset_gen;
+      end if;
+    end if;
 
-  --------------------------------------------------------
-  -- Data generation process
-  --------------------------------------------------------
-  p_stimulus : process is
-  begin
+  end process p_mux;
+  ground <= '0';
 
-    report "Stimulus process started";
-
-    -- WRITE YOUR CODE HERE AND TEST INPUT VALUE
-    -- Display "3.142"
-    sig_data0 <= "0011";
-    sig_data1 <= x"1";
-    sig_data2 <= x"4";
-    sig_data3 <= x"2";
-    sig_dp_vect <= "0100";
-    report "Stimulus process finished";
-    wait;
-
-  end process p_stimulus;
-
-end architecture testbench;
+end architecture behavioral;
