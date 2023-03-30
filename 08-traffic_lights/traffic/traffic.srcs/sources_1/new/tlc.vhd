@@ -87,7 +87,7 @@ begin
       -- 1   @ 10 ns
       -- ??? @ 250 ms
       --! g_MAX => 1 
-      g_MAX => 25000000
+      g_MAX => 1
     )
     port map (
       clk => clk,
@@ -112,13 +112,33 @@ begin
         -- Every 250 ms, CASE checks the value of sig_state
         -- local signal and changes to the next state 
         -- according to the delay value.
+        
         if (speed_button = '1') then
-            -- Write when south_go is enable then must be south_wait the first
-            sig_state <= WEST_GO;
-            sig_cnt   <= (others => '0');
-        end if;
+            -- speed button solution
+            case sig_state is
+               -- Must be safe switch to west_go
+                when SOUTH_GO =>
+                -- Jump to the state of south_wait and wait to one sec
+                    sig_state <= SOUTH_WAIT;
+                    sig_cnt   <= (others => '0');
+                    
+                    if (sig_cnt < c_DELAY_1SEC) then
+                      sig_cnt <= sig_cnt + 1;
+                    else
+                      -- Jump to the state of west_go
+                      sig_state <= WEST_GO;
+                      -- Reset delay counter value
+                      sig_cnt   <= (others => '0');
+                    end if;
+                when others =>
+                    -- Jump to west_go
+                    sig_state <= WEST_GO;
+                    sig_cnt   <= (others => '0');
+                end case;
+         end if;
+         
         case sig_state is
-
+        
           when WEST_STOP =>
             -- Count to 2 secs
             if (sig_cnt < c_DELAY_2SEC) then
