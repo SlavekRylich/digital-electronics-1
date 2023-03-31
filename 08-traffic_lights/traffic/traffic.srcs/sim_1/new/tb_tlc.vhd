@@ -76,7 +76,7 @@ begin
   begin
 
     sig_rst <= '0';
-    wait for 200 ns;
+    wait for 350 ns;
 
     -- Reset activated
     sig_rst <= '1';
@@ -95,18 +95,18 @@ begin
   begin
 
     sig_speed_button <= '0';
-    wait for 450 ns;
+    wait for 600 ns;
 
     -- Reset activated
     sig_speed_button <= '1';
-    wait for 200 ns;
+    wait for 50 ns;
 
     -- Reset deactivated
     sig_speed_button <= '0';
-    wait for 300 ns;
+    wait for 400 ns;
     
     sig_speed_button <= '1';
-    wait for 50 ns;
+    wait for 100 ns;
     
     sig_speed_button <= '0';
     wait;
