@@ -20,6 +20,9 @@ entity stopwatch_seconds is
     port(
         clk            : in  std_logic;
         reset          : in  std_logic;
+        --i_round        : in  std_logic_vector(3 downto 0);    --! Input round count, max 16
+        --i_run_time     : in  std_logic_vector(5 downto 0);    --! Input run time
+        --i_rest_time    : in  std_logic_vector(5 downto 0);    --! Input rest time
         start_i        : in  std_logic;     -- Start counting
         pause_i        : in  std_logic;     -- Pause counting
         -- Tens of seconds
@@ -30,6 +33,7 @@ entity stopwatch_seconds is
         hundredths_h_o : out std_logic_vector(4 - 1 downto 0);
         -- Hundredths of seconds
         hundredths_l_o : out std_logic_vector(4 - 1 downto 0)
+        --done           : out std_logic
     );
 end entity stopwatch_seconds;
 
@@ -56,7 +60,7 @@ begin
 
     -- JUST FOR SHORTER/FASTER SIMULATION
     s_en <= '1';
-    s_updown <= '1';
+    s_updown <= '0';
 --    clk_en0 : entity work.clock_enable
 --generic map(
  --          g_MAX =>  4      -- 10 ms / (1/100 MHz) = g_MAX
@@ -79,76 +83,78 @@ begin
     begin
         if rising_edge(clk) then
 
-            if (reset = '1') then           -- Synchronous reset
-                s_cnt3 <= (others => '0');  -- Clear all bits
-                s_cnt2 <= (others => '0');
-                s_cnt1 <= (others => '0');
-                s_cnt0 <= (others => '0');
-                s_start <= '0';             -- Clear start button flag
-
-            -- Use flag to remember if start button was pressed
-            elsif (start_i = '1') then
-                s_start <= '1';             -- Set start button flag
-
---            -- Counting only if start was pressed and pause is inactive
-             if  (s_en = '1' and s_start = '1' and pause_i = '0' and s_updown = '1') then
-                s_cnt0 <= s_cnt0 + 1;       -- Increment every 10 ms
-
-                -- Test hundredths of seconds
-                --- WRITE YOUR CODE HERE
-                if ( s_cnt0 = "1001") then    
-                	s_cnt1 <= s_cnt1 + 1;
+            if (s_updown = '1') then
+                if (reset = '1') then           -- Synchronous reset
+                    s_cnt3 <= (others => '0');  -- Clear all bits
+                    s_cnt2 <= (others => '0');
+                    s_cnt1 <= (others => '0');
                     s_cnt0 <= (others => '0');
-
-                    -- Test tenths of seconds
-                    --- WRITE YOUR CODE HERE
-                    if ( s_cnt1 = "1001") then
-                        s_cnt2 <= s_cnt2 + 1;
-                        s_cnt1 <= (others => '0');
-                      
-
-                
-                        --- WRITE YOUR CODE HERE
-
-                            -- Test tens of seconds
-                            --- WRITE YOUR CODE HERE
-                            if ( s_cnt2 = "100") then   -- 10 s
-                                s_cnt3 <= s_cnt3 + 1;
-                                s_cnt2 <= (others => '0');
+                    s_start <= '0';             -- Clear start button flag
+                    --done <= '0';
+    
+                -- Use flag to remember if start button was pressed
+                elsif (start_i = '1') then
+                    s_start <= '1';             -- Set start button flag
+    
+    --            -- Counting only if start was pressed and pause is inactive
+                 if  (s_en = '1' and s_start = '1' and pause_i = '0') then
+                    s_cnt0 <= s_cnt0 + 1;       -- Increment every 10 ms
+    
+                    -- Test hundredths of seconds
+                    if ( s_cnt0 = "1001") then    
+                        s_cnt1 <= s_cnt1 + 1;
+                        s_cnt0 <= (others => '0');
+    
+                        -- Test tenths of seconds
+                        if ( s_cnt1 = "1001") then
+                            s_cnt2 <= s_cnt2 + 1;
+                            s_cnt1 <= (others => '0');
+                            
+                                -- Test tens of seconds
+                                if ( s_cnt2 = "100") then   -- 10 s
+                                    s_cnt3 <= s_cnt3 + 1;
+                                    s_cnt2 <= (others => '0');
+                                end if;
+                       end if;
+                    end if;
+                 end if;
+                 end if ;
+            elsif (s_updown = '0') then
+                   if (reset = '1') then           -- Synchronous reset
+                        s_cnt3 <= "111";  -- Clear all bits
+                        s_cnt2 <= "1001";
+                        s_cnt1 <= "1001";
+                        s_cnt0 <= "1001";
+                        s_start <= '0';             -- Clear start button flag
+                        --done <= '0';
+                    -- Use flag to remember if start button was pressed
+                    elsif (start_i = '1') then
+                            s_start <= '1';             -- Set start button flag
+                       if  (s_en = '1' and s_start = '1' and pause_i = '0') then
+                            s_cnt0 <= s_cnt0 - 1;       -- Decrement every 10 ms
+                        
+                            -- Test hundredths of seconds
+                            if ( s_cnt0 = "0000") then    
+                                s_cnt1 <= s_cnt1 - 1;
+                                s_cnt0 <= "1001";
+            
+                                -- Test tenths of seconds
+                                if ( s_cnt1 = "0000") then
+                                    s_cnt2 <= s_cnt2 - 1;
+                                    s_cnt1 <= "1001";
+            
+                                        -- Test tens of seconds
+                                        if ( s_cnt2 = "000") then   -- 0 s
+                                            s_cnt3 <= s_cnt3 - 1;
+                                            s_cnt2 <= "1001";
+                                        end if;
+                                 end if;
                             end if;
-                    end if;
-                    end if;
-               elsif  (s_en = '1' and s_start = '1' and pause_i = '0' and s_updown = '0') then
-                s_cnt0 <= s_cnt0 + 1;       -- Increment every 10 ms
-
-                -- Test hundredths of seconds
-                --- WRITE YOUR CODE HERE
-                if ( s_cnt0 = "1001") then    
-                	s_cnt1 <= s_cnt1 - 1;
-                    s_cnt0 <= (others => '1');
-
-                    -- Test tenths of seconds
-                    --- WRITE YOUR CODE HERE
-                    if ( s_cnt1 = "1001") then
-                        s_cnt2 <= s_cnt2 + 1;
-                        s_cnt1 <= (others => '0');
-                      
-
-                
-                        --- WRITE YOUR CODE HERE
-
-                            -- Test tens of seconds
-                            --- WRITE YOUR CODE HERE
-                            if ( s_cnt2 = "100") then   -- 10 s
-                                s_cnt3 <= s_cnt3 + 1;
-                                s_cnt2 <= (others => '0');
-                            end if;
-                    end if;
-                    end if;
-                
+                       end if;
+                   end if;
                 end if;       
             end if;
-        end if;
+       
     end process p_stopwatch_cnt;
 
     -- Outputs must be retyped from "unsigned" to "std_logic_vector"
