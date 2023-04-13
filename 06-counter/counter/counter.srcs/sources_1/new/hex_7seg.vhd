@@ -32,12 +32,13 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity hex_7seg is
-    Port ( blank : in STD_LOGIC;
-           hex : in STD_LOGIC_VECTOR (3 downto 0);
-           seg : out STD_LOGIC_VECTOR (6 downto 0));
+    Port ( blank : in STD_LOGIC;                        --! Blank (clear) display 
+           hex : in STD_LOGIC_VECTOR (5 downto 0);      --! Input binary data
+           seg : out STD_LOGIC_VECTOR (6 downto 0));    --! Cathode values in the order A, B, C, D, E, F, G
 end hex_7seg;
 
 architecture Behavioral of hex_7seg is
+-- signals
 
 begin
 
@@ -68,49 +69,47 @@ begin
 
       case hex is
 
-        when "0000" =>
+        when "000000" =>
 
           seg <= "0000001"; -- 0
 
-        when "0001" =>
+        when "000001" =>
 
           seg <= "1001111"; -- 1
 
-        -- WRITE YOUR CODE HERE
-        -- 2, 3, 4, 5, 6, 7
         
-         when "0010" =>
+         when "000010" =>
 
           seg <= "0010010"; -- 2
 
-        when "0011" =>
+        when "000011" =>
 
           seg <= "0000110"; -- 3
           
-         when "0100" =>
+         when "000100" =>
 
           seg <= "1001100"; -- 4
           
-         when "0101" =>
+         when "000101" =>
 
           seg <= "0100100"; -- 5
           
-         when "0110" =>
+         when "000110" =>
 
           seg <= "0100000"; -- 6
           
-         when "0111" =>
+         when "000111" =>
 
           seg <= "0001111"; -- 6
 
-        when "1000" =>
+        when "001000" =>
 
           seg <= "0000000"; -- 8
 
         -- WRITE YOUR CODE HERE
         -- 9, A, b, C, d
         
-        when "1001" =>
+        when "001001" =>
 
           seg <= "0000100"; -- 9
           
