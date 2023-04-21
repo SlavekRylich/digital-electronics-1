@@ -58,6 +58,7 @@ signal sig_en : std_logic;
  signal sig_cnt_round : unsigned(3 downto 0);--unsigned(3 downto 0);
  signal sig_cnt_run : integer;--unsigned(5 downto 0);
  signal sig_cnt_pause : integer;--unsigned(5 downto 0);
+ signal sig_output : std_logic_vector(5 downto 0);
  --Convert 10s input to number
  function count_ones(s : std_logic_vector) return integer is
   variable temp : integer := 0;
@@ -79,7 +80,8 @@ begin
       -- 1   @ 10 ns
       -- 25000000 @ 250 ms
       -- 100000000 @ 1 s
-      g_MAX => 100000000
+      --g_MAX => 100000000
+      g_MAX => 100
     )
     port map 
     (
@@ -87,6 +89,16 @@ begin
       rst => rst,
       ce  => sig_en
     );
+  
+  bcd_converter0: entity work.bin_to_BCD
+    port map 
+    (
+        clk         =>  clk,
+        reset       =>  rst,
+        binary_in   =>  sig_output
+    );  
+    
+    
  p_states : process (clk) is
   begin
   if (rising_edge(clk)) 
@@ -127,17 +139,21 @@ begin
             when FINISH =>
             
         end case;
+        -- sem
+
       end if;
    end if;
   end process p_states;
-    p_output_fsm : process (sig_state) is
+    p_output_fsm : process (sig_state,clk) is
   begin
 
     case sig_state is
       when RUN =>
-        output <= std_logic_vector(to_unsigned(sig_cnt_run, output'length));
+        sig_output <= std_logic_vector(to_unsigned(sig_cnt_run, output'length));
+        output <= sig_output;
       when PAUSE =>
-        output <= std_logic_vector(to_unsigned(sig_cnt_pause, output'length));
+      sig_output <= std_logic_vector(to_unsigned(sig_cnt_pause, output'length));
+        output <= sig_output;
       when SET =>
         output <= "000000";
       when FINISH =>   

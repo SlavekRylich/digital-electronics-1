@@ -1,6 +1,6 @@
 ----------------------------------------------------------
 --
---! @title Driver for 4-digit 7-segment display
+--! @title Driver for 8-digit 7-segment display
 --! @author Tomas Fryza
 --! Dept. of Radio Electronics, Brno Univ. of Technology, Czechia
 --!
@@ -44,26 +44,30 @@ library ieee;
 --
 ----------------------------------------------------------
 
-entity driver_7seg_4digits_for_timer is
+entity driver_7seg_4digits is
   port (
     clk     : in    std_logic;
     rst     : in    std_logic;
     data0   : in    std_logic_vector(3 downto 0);
     data1   : in    std_logic_vector(3 downto 0);
---    data2   : in    std_logic_vector(3 downto 0);
---    data3   : in    std_logic_vector(3 downto 0);
---    dp_vect : in    std_logic_vector(2 downto 0);
-    --dp      : out   std_logic;
-    seg     : out   std_logic_vector(6 downto 0);       --! leds of 7segment display
-    dig     : out   std_logic_vector(3 downto 0)        --! count of 7segment display
+    data2   : in    std_logic_vector(3 downto 0);
+    data3   : in    std_logic_vector(3 downto 0);
+    data4   : in    std_logic_vector(3 downto 0);
+    data5   : in    std_logic_vector(3 downto 0);
+    data6   : in    std_logic_vector(3 downto 0);
+    data7   : in    std_logic_vector(3 downto 0);
+    dp_vect : in    std_logic_vector(3 downto 0);
+    dp      : out   std_logic;
+    seg     : out   std_logic_vector(6 downto 0);
+    dig     : out   std_logic_vector(3 downto 0)
   );
-end entity driver_7seg_4digits_for_timer;
+end entity driver_7seg_4digits;
 
 ----------------------------------------------------------
 -- Architecture declaration for display driver
 ----------------------------------------------------------
 
-architecture behavioral of driver_7seg_4digits_for_timer is
+architecture behavioral of driver_7seg_4digits is
 
   -- Internal clock enable
   signal sig_en_4ms : std_logic;
@@ -136,35 +140,31 @@ begin
     if (rising_edge(clk)) then
       if (rst = '1') then
         sig_hex <= data0;
-       -- dp      <= dp_vect(0);
-        dig     <= "1110";
+        dp      <= dp_vect(0);
+        dig     <= "1111";
       else
 
         case sig_cnt_2bit is
 
           when "11" =>
-           -- sig_hex <= data3;
-           -- dp      <= dp_vect(3);
+            sig_hex <= data3;
+            dp      <= dp_vect(3);
             dig     <= "0111";
 
           when "10" =>
-            -- DEFINE ALL OUTPUTS FOR "10" HERE
-           -- sig_hex <= data2;
-         --   dp      <= dp_vect(2);
+            sig_hex <= data2;
+            dp      <= dp_vect(2);
             dig     <= "1011";
 
           when "01" =>
-            -- DEFINE ALL OUTPUTS FOR "01" HERE
             sig_hex <= data1;
-          --  dp      <= dp_vect(1);
+            dp      <= dp_vect(1);
             dig     <= "1101";
 
           when others =>
-            -- DEFINE ALL OUTPUTS FOR "00" HERE
             sig_hex <= data0;
-           -- dp      <= dp_vect(0);
+            dp      <= dp_vect(0);
             dig     <= "1110";
-
         end case;
 
       end if;

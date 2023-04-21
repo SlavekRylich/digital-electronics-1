@@ -65,8 +65,9 @@ begin
                     sig_q <= not sig_q;
                 end if;
           end if;
-        q     <= sig_q;
-        q_bar <= not sig_q;
         
     end process p_jk_ff_rst;
+    
+        q     <= sig_q;
+        q_bar <= not sig_q;
 end architecture behavioral;

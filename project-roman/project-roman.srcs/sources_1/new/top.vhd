@@ -21,6 +21,7 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use ieee.std_logic_unsigned.all;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -40,6 +41,7 @@ end top;
 
 architecture Behavioral of top is
 
+signal sig_output : std_logic_vector(5 downto 0);
 begin
 statemachine: entity work.statemachine
 port map
@@ -49,6 +51,17 @@ port map
          set_run => SW(5 downto 0), --: in STD_LOGIC_VECTOR (3 downto 0);
          set_pause => SW(11 downto 6),   --: in STD_LOGIC_VECTOR (5 downto 0);
          set_round => SW(15 downto 12),   --: in STD_LOGIC_VECTOR (5 downto 0);
-         output => LED     --: out STD_LOGIC_VECTOR (5 downto 0)
+         output => sig_output     --: out STD_LOGIC_VECTOR (5 downto 0)
 );
+
+--bcd_converter0: entity work.bin_to_BCD
+--port map 
+--(
+--    clk         =>  CLK100MHZ,
+--    reset       =>  BTNC,
+--    binary_in   =>  sig_output
+--);
+
+LED <= sig_output;
+
 end Behavioral;

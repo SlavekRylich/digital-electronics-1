@@ -59,7 +59,7 @@ uut_top : entity work.top
 p_clk_gen : process is
   begin
 
-    while now < 750 ns loop             -- 75 periods of 100MHz clock
+    while now < 20750 ns loop             -- 75 periods of 100MHz clock
 
       sig_clk_100mhz <= '0';
       wait for c_CLK_100MHZ_PERIOD / 2;
@@ -78,11 +78,14 @@ p_clk_gen : process is
   begin
 
     sig_rst <= '0';
-    wait for 12 ns;
+    wait for 20 ns;
 
     -- Reset activated
     sig_rst <= '1';
+    wait for 20 ns ;
+    
     wait for 70 ns;
+    
 
     -- Reset deactivated
     sig_rst <= '0';
@@ -94,7 +97,7 @@ p_stimulus : process is
   begin
 
     report "Stimulus process started";
-    sig_sw <= "0011000011000011";
+    sig_sw <= "0011000111111111";
     report "Stimulus process finished";
     wait;
 

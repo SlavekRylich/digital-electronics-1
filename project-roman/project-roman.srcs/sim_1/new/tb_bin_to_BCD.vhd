@@ -12,26 +12,20 @@ ARCHITECTURE behavior OF tb_bcd IS
     PORT(
          clk : IN  std_logic;
          reset : IN  std_logic;
-         binary_in : IN  std_logic_vector(15 downto 0);
+         binary_in : IN  std_logic_vector(5 downto 0);
          bcd0 : OUT  std_logic_vector(3 downto 0);
-         bcd1 : OUT  std_logic_vector(3 downto 0);
-         bcd2 : OUT  std_logic_vector(3 downto 0);
-         bcd3 : OUT  std_logic_vector(3 downto 0);
-         bcd4 : OUT  std_logic_vector(3 downto 0)
+         bcd1 : OUT  std_logic_vector(3 downto 0)
         );
     END COMPONENT;
  
    --Inputs
    signal clk : std_logic := '0';
    signal reset : std_logic := '0';
-   signal binary_in : std_logic_vector(15 downto 0) := (others => '0');
+   signal binary_in : std_logic_vector(5 downto 0) := (others => '0');
  
     --Outputs
    signal bcd0 : std_logic_vector(3 downto 0);
    signal bcd1 : std_logic_vector(3 downto 0);
-   signal bcd2 : std_logic_vector(3 downto 0);
-   signal bcd3 : std_logic_vector(3 downto 0);
-   signal bcd4 : std_logic_vector(3 downto 0);
  
    -- Clock period definitions
    constant clk_period : time := 10 ns;
@@ -44,10 +38,7 @@ BEGIN
           reset => reset,
           binary_in => binary_in,
           bcd0 => bcd0,
-          bcd1 => bcd1,
-          bcd2 => bcd2,
-          bcd3 => bcd3,
-          bcd4 => bcd4
+          bcd1 => bcd1
         );
  
    -- Clock process definitions
@@ -67,16 +58,16 @@ BEGIN
       wait for 100 ns;
         reset <= '0';
  
-        binary_in <= "0000000000001111";
-      wait for 200 ns;
- 
-        binary_in <= "0000000001001111";
-      wait for 200 ns;
- 
-        binary_in <= "0000000001111111";
-      wait for 200 ns;
- 
-        binary_in <= "0000111101001111";
+        binary_in <= "000010";
+        wait for 200 ns;
+        binary_in <= "000010";
+        wait for 200 ns;
+        binary_in <= "000011";
+        wait for 200 ns;
+        binary_in <= "001010";
+        wait for 200 ns;
+        binary_in <= "111111";
+        wait for 200 ns;
       wait for 2000 ns;
  
     end process;
