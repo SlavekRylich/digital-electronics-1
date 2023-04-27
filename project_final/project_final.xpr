@@ -3,7 +3,7 @@
 <!--                                                         -->
 <!-- Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.   -->
 
-<Project Version="7" Minor="54" Path="C:/Users/xrylic00/Documents/xrylic00/DE1/digital-electronics-1/project_final/project_final/project_final.xpr">
+<Project Version="7" Minor="54" Path="C:/Users/xrylic00/Documents/xrylic00/DE1/digital-electronics-1/project_final/project_final.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
     <Option Name="Id" Val="94aa0741e2a74a39bfdcf7e418219b04"/>
@@ -36,6 +36,7 @@
     <Option Name="ActiveSimSet" Val="sim_1"/>
     <Option Name="DefaultLib" Val="xil_defaultlib"/>
     <Option Name="ProjectType" Val="Default"/>
+    <Option Name="IPOutputRepo" Val="$PCACHEDIR/ip"/>
     <Option Name="IPDefaultOutputPath" Val="$PGENDIR/sources_1"/>
     <Option Name="IPCachePermission" Val="read"/>
     <Option Name="IPCachePermission" Val="write"/>
@@ -76,7 +77,7 @@
       <Filter Type="Srcs"/>
       <File Path="$PSRCDIR/sources_1/new/clock_enable.vhd">
         <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/../../project-roman/project-roman.srcs/sources_1/new/clock_enable.vhd"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../project-roman/project-roman.srcs/sources_1/new/clock_enable.vhd"/>
           <Attr Name="ImportTime" Val="1682586442"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -84,7 +85,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/new/bin_to_BCD.vhd">
         <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/../../project-roman/project-roman.srcs/sources_1/new/bin_to_BCD.vhd"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../project-roman/project-roman.srcs/sources_1/new/bin_to_BCD.vhd"/>
           <Attr Name="ImportTime" Val="1682586442"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -92,7 +93,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/new/cnt_up_down.vhd">
         <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/../../project-roman/project-roman.srcs/sources_1/new/cnt_up_down.vhd"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../project-roman/project-roman.srcs/sources_1/new/cnt_up_down.vhd"/>
           <Attr Name="ImportTime" Val="1682586442"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -100,7 +101,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/new/hex_7seg.vhd">
         <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/../../project-roman/project-roman.srcs/sources_1/new/hex_7seg.vhd"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../project-roman/project-roman.srcs/sources_1/new/hex_7seg.vhd"/>
           <Attr Name="ImportTime" Val="1682586442"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -108,7 +109,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/new/driver_7seg_4digits_for_timer.vhd">
         <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/../../project-roman/project-roman.srcs/sources_1/new/driver_7seg_4digits_for_timer.vhd"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../project-roman/project-roman.srcs/sources_1/new/driver_7seg_4digits_for_timer.vhd"/>
           <Attr Name="ImportTime" Val="1682586442"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -116,7 +117,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/new/statemachine.vhd">
         <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/../../project-roman/project-roman.srcs/sources_1/new/statemachine.vhd"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../project-roman/project-roman.srcs/sources_1/new/statemachine.vhd"/>
           <Attr Name="ImportTime" Val="1682586442"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -124,7 +125,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/new/top.vhd">
         <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/../../project-roman/project-roman.srcs/sources_1/new/top.vhd"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../project-roman/project-roman.srcs/sources_1/new/top.vhd"/>
           <Attr Name="ImportTime" Val="1682586442"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -153,7 +154,7 @@
       <Filter Type="Srcs"/>
       <File Path="$PSRCDIR/sim_1/new/tb_bin_to_BCD.vhd">
         <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/../../project-roman/project-roman.srcs/sim_1/new/tb_bin_to_BCD.vhd"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../project-roman/project-roman.srcs/sim_1/new/tb_bin_to_BCD.vhd"/>
           <Attr Name="ImportTime" Val="1682586442"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -162,7 +163,7 @@
       <File Path="$PSRCDIR/sim_1/new/sim.vhd">
         <FileInfo>
           <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="ImportPath" Val="$PPRDIR/../../project-roman/project-roman.srcs/sim_1/new/sim.vhd"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../project-roman/project-roman.srcs/sim_1/new/sim.vhd"/>
           <Attr Name="ImportTime" Val="1682586442"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -180,7 +181,6 @@
         <Option Name="PamSignalDriverFile" Val="xil_bypass_driver"/>
         <Option Name="PamPseudoTop" Val="pseudo_tb"/>
         <Option Name="SrcSet" Val="sources_1"/>
-        <Option Name="xsim.simulate.runtime" Val="20000ns"/>
       </Config>
     </FileSet>
     <FileSet Name="utils_1" Type="Utils" RelSrcDir="$PSRCDIR/utils_1" RelGenDir="$PGENDIR/utils_1">
@@ -209,7 +209,7 @@
     </Simulator>
   </Simulators>
   <Runs Version="1" Minor="15">
-    <Run Id="synth_1" Type="Ft3:Synth" SrcSet="sources_1" Part="xc7a50ticsg324-1L" ConstrsSet="constrs_1" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" State="current" Dir="$PRUNDIR/synth_1" IncludeInArchive="true" AutoIncrementalDir="$PPRDIR/../../project-roman/project-roman.srcs/utils_1/imports/synth_1">
+    <Run Id="synth_1" Type="Ft3:Synth" SrcSet="sources_1" Part="xc7a50ticsg324-1L" ConstrsSet="constrs_1" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" State="current" Dir="$PRUNDIR/synth_1" IncludeInArchive="true" AutoIncrementalDir="$PPRDIR/../project-roman/project-roman.srcs/utils_1/imports/synth_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
         <Step Id="synth_design"/>
@@ -219,7 +219,7 @@
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="impl_1" Type="Ft2:EntireDesign" Part="xc7a50ticsg324-1L" ConstrsSet="constrs_1" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" State="current" Dir="$PRUNDIR/impl_1" SynthRun="synth_1" IncludeInArchive="true" GenFullBitstream="true" AutoIncrementalDir="$PPRDIR/../../project-roman/project-roman.srcs/utils_1/imports/impl_1">
+    <Run Id="impl_1" Type="Ft2:EntireDesign" Part="xc7a50ticsg324-1L" ConstrsSet="constrs_1" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" State="current" Dir="$PRUNDIR/impl_1" SynthRun="synth_1" IncludeInArchive="true" GenFullBitstream="true" AutoIncrementalDir="$PPRDIR/../project-roman/project-roman.srcs/utils_1/imports/impl_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2020"/>
         <Step Id="init_design"/>
